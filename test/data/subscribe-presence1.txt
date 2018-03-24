@@ -1,0 +1,14 @@
+SUBSCRIBE sip:51445@10.128.77.12:5060 SIP/2.0
+Via: SIP/2.0/UDP 10.128.77.170:5060;branch=z9hG4bK84sansay2187256504rdb19931
+To: <sip:51445@10.128.77.12>;tag=QVpLAbyFixJs
+From: <sip:51447@10.128.77.12>;tag=sansay2187256504rdb19931
+Call-ID: 84929ZGMzY2I1OWYzYzM5ZjIzNzQ1Y2ZjYzEzZTZlNDFhZTQ
+CSeq: 84 SUBSCRIBE
+Contact: <sip:51447@10.128.77.170:5060>
+Expires: 3472
+Accept: application/pidf+xml
+Allow: SUBSCRIBE, NOTIFY, INVITE, ACK, CANCEL, BYE, REFER, INFO, OPTIONS, MESSAGE
+User-Agent: Bria 4 release 4.8.1 stamp 84929
+Event: presence
+Max-Forwards: 69
+Content-Length: 0

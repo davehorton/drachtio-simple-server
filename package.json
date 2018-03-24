@@ -1,0 +1,49 @@
+{
+  "name": "drachtio-simple-server",
+  "version": "1.0.0",
+  "description": "A basic SIP SIMPLE server",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "jslint": "eslint lib app.js",
+    "test": "NODE_ENV=test node test/ | ./node_modules/.bin/tap-spec",
+    "coverage": "NODE_ENV=test ./node_modules/.bin/istanbul cover test/ --report html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davehorton/drachtio-simple-server.git"
+  },
+  "keywords": [
+    "sip",
+    "drachtio",
+    "SIMPLE",
+    "presence"
+  ],
+  "author": "Dave Horton",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/davehorton/drachtio-simple-server/issues"
+  },
+  "homepage": "https://github.com/davehorton/drachtio-simple-server#readme",
+  "dependencies": {
+    "config": "^1.30.0",
+    "debug": "^3.1.0",
+    "drachtio-srf": "^4.2.11",
+    "lodash": "^4.17.5",
+    "minimist": "^1.2.0",
+    "pino": "^4.13.0",
+    "redis": "^2.8.0",
+    "xml2js": "^0.4.19",
+    "xml2js-extra": "^1.0.0"
+  },
+  "devDependencies": {
+    "async": "^2.6.0",
+    "blue-tape": "^1.0.0",
+    "clear-require": "^2.0.0",
+    "fs-extra": "^5.0.0",
+    "istanbul": "^0.4.5",
+    "tap-dot": "^1.0.5",
+    "tap-spec": "^4.1.1",
+    "tape": "^4.9.0"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "drachtio": {
+    "host": "127.0.0.1",
+    "port": 9026,
+    "secret": "cymru"
+  },
+  "redis" : {
+    "address": "127.0.0.1",
+    "port": 9379
+  },
+  "supported-events": ["presence"]  
+}

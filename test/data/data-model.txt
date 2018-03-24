@@ -1,0 +1,38 @@
+
+
+Subscription:
+
+entity susbcribed to - request uri of SUBSCRIBE
+event susbcribed to - event header
+id of subscription - optional, if provided in Event header
+expiration - expires header of subscribe
+contact / address to send notifies to - contact header of SUBCRIBE
+
+handling SUBSCRIBE request:
+
+- if event is not understood, return 489 Bad Event
+- if expires is too small, return 423 Interval too small, with Min-Expires
+- send 200 if subscription is accepted immediately, 202 Accepted if needs to reach user
+- reduce expires if desired, but do not lengthen it
+- send immediate NOTIFY; can be empty if nothing to notify about; include Subscription-State: active
+- if we get a 481, remove the subscription
+
+storing subscription data in redis
+
+- store a set of subscriptions: e.g. user:51445:presence:subscribers is the key for a redis set
+- each entry in the set is a uuid representing a specific subscription
+- each uuid references a hash by key subscription:${uuid} referenced above, with hash { contact or list, id, timestamp, expires }
+- redis expires the hash key based on Expires header
+- external app subscribes to key expire events, and removes the associated uuid from the set upon expiry
+
+storing event data in redis
+- store a hash with simple key event:entity:event, e.g. user:51445:presence:doc with hash (xml doc, timestamp)
+- when storing a doc, retrieve subscribers for that user:event and notify them
+
+PUBLISH
+
+- event state stored as a hash keyed by event:${event}:${entity-tag}
+- the key will have an expiry
+- the hash will have address-of-record, content type, and content
+
+Problem: how will we look up event state by aor and event type?

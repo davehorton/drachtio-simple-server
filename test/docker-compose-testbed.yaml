@@ -1,0 +1,26 @@
+version: '2.1'
+
+networks:
+  simple:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.34.0.0/16
+
+services:
+  drachtio:
+    image: drachtio/drachtio-server:latest
+    command: drachtio --contact "sip:*;transport=udp" --loglevel debug
+    ports:
+      - "9026:9022/tcp"
+    networks:
+      simple:
+        ipv4_address: 172.34.0.2
+
+  redis:
+    image: redis
+    ports:
+      - "9379:6379/tcp"
+    networks:
+      simple:
+        ipv4_address: 172.34.0.3

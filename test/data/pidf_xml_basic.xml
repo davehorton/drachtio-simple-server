@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<presence xmlns="urn:ietf:params:xml:ns:pidf"
+xmlns:dm="urn:ietf:params:xml:ns:pidf:data-model"
+xmlns:rpid="urn:ietf:params:xml:ns:pidf:rpid"
+ entity="sip:151484@sip.qa.phone.com">
+<tuple id="dbac281a0de5d15043">
+<status>
+<basic>closed</basic>
+</status>
+</tuple>
+<dm:person id="b7ff289adcf65f0088">
+<dm:note>Busy</dm:note>
+</dm:person>
+</presence>

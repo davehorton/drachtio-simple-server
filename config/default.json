@@ -1,0 +1,4 @@
+{
+  "supported-events": ["presence"],
+  "domain": "example.com"
+}
