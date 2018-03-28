@@ -6,36 +6,183 @@ process.on('unhandledRejection', (reason, p) => {
   console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
 });
 
-function connect(srf) {
+function connect(connectable) {
   return new Promise((resolve, reject) => {
-    srf.on('connect', () => {
+    connectable.on('connect', () => {
       return resolve();
     });
   });
 }
 test('PUBLISH', (t) => {
-  const {srf, client} = require('..');
+  const {srf, db} = require('..');
 
-  t.timeoutAfter(20000);
+  t.timeoutAfter(60000);
 
-  connect(srf)
+  Promise.all([connect(srf), connect(db)])
     .then(() => {
       return sippUac('uac-publish-unknown-event.xml');
     })
     .then(() => {
       return t.pass('returns 489 Bad Event to unknown event');
     })
+    .then(() => {
+      return sippUac('uac-publish-missing-event.xml');
+    })
+    .then(() => {
+      return t.pass('returns 400 Bad Request when no Event header');
+    })
+    .then(() => {
+      return sippUac('uac-publish-reduce-expiry.xml');
+    })
+    .then(() => {
+      return t.pass('Expires header is reduced to specified limit if too large');
+    })
+    .then(() => {
+      return sippUac('uac-publish-default-expires.xml');
+    })
+    .then(() => {
+      return t.pass('Expires defaults to local configuration if no Expires header received');
+    })
+    .then(() => {
+      return sippUac('uac-publish-expires-too-short.xml');
+    })
+    .then(() => {
+      return t.pass('returns 423 Interval Too Brief if Expires is too small');
+    })
+    .then(() => {
+      return sippUac('uac-publish-presence-5s.xml');
+    })
+    .then(() => {
+      t.pass('PUBLISH initial state succeeds');
+      const {aor} = db.lastInsert;
+      return db.getEventState(aor, 'presence');
+    })
+    .then((obj) => {
+      t.ok(obj, 'event state can be retrieved by aor');
+      const {etag} = db.lastInsert;
+      return db.getEventStateByETag(etag);
+    })
+    .then((obj) => {
+      const {aor} = db.lastInsert;
+      t.ok(obj.aor === aor, 'event state can be retrieved by etag');
+      return;
+    })
+    .then(() => {
+      return db.getCountOfEtags();
+    })
+    .then((count) => {
+      return t.ok(count === 1, 'there is one active ETag now');
+    })
+    .then(() => {
+      t.pass('wait 5s for event state to expire');
+      return new Promise((resolve) => {
+        setTimeout(() => { resolve();}, 5500);
+      });
+    })
+    .then(() => {
+      const {aor} = db.lastInsert;
+      return db.getEventState(aor, 'presence');
+    })
+    .then((obj) => {
+      t.ok(obj === null, 'event state has expired after 5s');
+      return db.purgeExpired();
+    })
+    .then((nExpired) => {
+      return t.ok(nExpired === 1, '\'purgeExpired\' removes secondary indices for expired state');
+    })
+    .then(() => {
+      return db.getCountOfEtags();
+    })
+    .then((count) => {
+      return t.ok(count === 0, 'there are no active ETag now');
+    })
+    .then(() => {
+      return sippUac('uac-publish-refresh-etag-unknown.xml');
+    })
+    .then(() => {
+      t.pass('returns 412 Conditional Request Failed to refreshing PUBLISH with unknown ETag (numeric)');
+      return;
+    })
+    .then(() => {
+      return sippUac('uac-publish-refresh-etag-unknown2.xml');
+    })
+    .then(() => {
+      t.pass('returns 412 Conditional Request Failed to refreshing PUBLISH with unknown ETag (non-numeric)');
+      return;
+    })
+    .then(() => {
+      return sippUac('uac-publish-presence-5s.xml');
+    })
+    .then(() => {
+      const {etag} = db.lastInsert;
+      t.pass(`initial state published with ETag: ${etag}`);
+      return sippUac('uac-publish-refresh-success.xml', ['-set', 'etag', etag]);
+    })
+    .then(() => {
+      const {etag} = db.lastRefresh;
+      t.pass(`state was refreshed with new ETag: ${etag}`);
+      return db.getEventStateByETag(etag);
+    })
+    .then(() => {
+      t.pass('state can be retrieved using new ETag');
+      const {etag} = db.lastInsert;
+      return db.getEventStateByETag(etag);
+    }).
+    then((data) => {
+      if (data === null) return t.pass('state can not be retrieved using old ETag');
+      else throw new Error('old ETag still exists after refresh');
+    })
+    .then(() => {
+      t.pass('wait 5s to verify event state has new expiry');
+      return new Promise((resolve) => {
+        setTimeout(() => { resolve();}, 5500);
+      });
+    })
+    .then(() => {
+      const {aor} = db.lastRefresh;
+      return db.getEventState(aor, 'presence');
+    })
+    .then((obj) => {
+      const {etag} = db.lastRefresh;
+      t.ok(obj !== null, 'after refresh event state has new expiry');
+      return sippUac('uac-publish-modify-success.xml', ['-set', 'etag', etag]);
+    })
+    .then(() => {
+      const {etag} = db.lastModify;
+      t.pass(`state was modified with new ETag: ${etag}`);
+      return db.getCountOfEtags();
+    })
+    .then((count) => {
+      const {etag} = db.lastModify;
+      t.ok(count === 1, 'old ETag is removed when event state was modified');
+      return sippUac('uac-publish-remove-success.xml', ['-set', 'etag', etag]);
+    })
+    .then(() => {
+      t.pass('PUBLISH with Expires: 0 removes event state');
+      return db.getCountOfEtags();
+    })
+    .then((count) => {
+      t.ok(count === 0, 'count of ETags is now zero');
+      return db.getCountOfKeys();
+    })
+    .then((count) => {
+      t.ok(count === 0, 'count of keys is now zero');
+      return;
+    })
+
 
     .then(() => {
       srf.disconnect();
-      client.quit();
-      return t.end();
+      db.disconnect();
+      t.end();
+      return;
     })
     .catch((err) => {
-      srf.disconnect();
-      client.quit();
-      console.log(`error received: ${err}`);
-      console.log(output());
       t.error(err);
+      console.log(`error: ${err}: ${err.stack}`);
+      srf.disconnect();
+      db.disconnect();
+      //console.log(output());
+      t.end();
     });
 });

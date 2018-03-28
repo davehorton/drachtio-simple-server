@@ -1,5 +1,5 @@
 const { spawn } = require('child_process');
-//const debug = require('debug')('test:sipp');
+const debug = require('debug')('test:sipp');
 let network;
 const obj = {};
 let output = '';
@@ -24,23 +24,24 @@ obj.output = () => {
   return output;
 };
 
-obj.sippUac = (file) => {
+obj.sippUac = (file, vars) => {
   const cmd = 'docker';
   const args = [
     'run', '-ti', '--rm', '--net', `${network}`,
     '-v', `${__dirname}/../scenarios:/tmp/scenarios`,
     'drachtio/sipp', 'sipp', '-sf', `/tmp/scenarios/${file}`,
     '-m', '1',
-    '-sleep', '250ms',
+    '-sleep', '50ms',
     '-nostdin',
-    '-cid_str', `%u-%p@%s-${idx++}`,
-    'drachtio'
-  ];
+    '-cid_str', `%u-%p@%s-${idx++}`
+  ]
+    .concat(Array.isArray(vars) ? vars : [])
+    .concat(['drachtio']);
 
   clearOutput();
 
   return new Promise((resolve, reject) => {
-    //console.log(`${cmd} ${args.join(' ')}`);
+    debug(`${cmd} ${args.join(' ')}`);
     const child_process = spawn(cmd, args, {stdio: ['inherit', 'pipe', 'pipe']});
 
     child_process.on('exit', (code, signal) => {

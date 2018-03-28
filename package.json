@@ -33,11 +33,12 @@
     "minimist": "^1.2.0",
     "pino": "^4.13.0",
     "redis": "^2.8.0",
+    "short-uuid": "^3.0.0",
+    "async": "^2.6.0",
     "xml2js": "^0.4.19",
     "xml2js-extra": "^1.0.0"
   },
   "devDependencies": {
-    "async": "^2.6.0",
     "blue-tape": "^1.0.0",
     "clear-require": "^2.0.0",
     "fs-extra": "^5.0.0",

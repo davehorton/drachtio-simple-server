@@ -8,5 +8,11 @@
     "address": "127.0.0.1",
     "port": 9379
   },
-  "supported-events": ["presence"]  
+  "supported-events": ["presence"],
+  "domain": "example.com",
+  "expires": {
+    "min": 5,
+    "default": 3600,
+    "max": 7200
+  }
 }
