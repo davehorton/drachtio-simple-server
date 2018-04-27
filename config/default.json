@@ -1,5 +1,22 @@
 {
   "supported-events": ["presence"],
   "domain": "example.com",
-  "expires": 3600
+  "methods": {
+    "publish": {
+      "expires": {
+        "min": 5,
+        "default": 3600,
+        "max": 7200
+      }     
+    },
+    "subscribe": {
+      "authenticate": true,      
+      "expires": {
+        "min": 5,
+        "default": {
+          "presence": 3600
+        }
+      }
+    }
+  }
 }

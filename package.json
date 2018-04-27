@@ -26,15 +26,16 @@
   },
   "homepage": "https://github.com/davehorton/drachtio-simple-server#readme",
   "dependencies": {
+    "async": "^2.6.0",
     "config": "^1.30.0",
     "debug": "^3.1.0",
+    "drachtio-mw-digest-auth": "^0.1.0",
     "drachtio-srf": "^4.2.11",
     "lodash": "^4.17.5",
     "minimist": "^1.2.0",
     "pino": "^4.13.0",
     "redis": "^2.8.0",
     "short-uuid": "^3.0.0",
-    "async": "^2.6.0",
     "xml2js": "^0.4.19",
     "xml2js-extra": "^1.0.0"
   },

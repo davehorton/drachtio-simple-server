@@ -10,9 +10,36 @@
   },
   "supported-events": ["presence"],
   "domain": "example.com",
-  "expires": {
-    "min": 5,
-    "default": 3600,
-    "max": 7200
+  "methods": {
+    "publish": {
+      "expires": {
+        "min": 5,
+        "default": 3600,
+        "max": 7200
+      }      
+    },
+    "subscribe": {
+      "authenticate": true,
+      "expires": {
+        "min": 3,
+        "default": {
+          "presence": 3600
+        }
+      }
+    }
   }
+  ,"test-users": [
+    {
+      "username": "user1",
+      "password": "pass123"
+    },
+    {
+      "username": "user2",
+      "password": "pass123"
+    },
+    {
+      "username": "user3",
+      "password": "pass123"
+    }
+  ]
 }

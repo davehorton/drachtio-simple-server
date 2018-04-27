@@ -46,7 +46,12 @@ const publishHandler = require('./lib/publish.js')({logger, db});
 const messageHandler = require('./lib/message.js')({logger, db});
 
 srf.options(optionsHandler);
-if (enabled.subscribe) srf.subscribe(subscribeHandler);
+if (enabled.subscribe) {
+  if (config.has('methods.subscribe.authenticate') && config.get('methods.subscribe.authenticate') === true) {
+    srf.use('subscribe', require('./lib/db/authenticate'));
+  }
+  srf.subscribe(subscribeHandler);
+}
 if (enabled.publish) srf.publish(publishHandler);
 if (enabled.message) srf.message(messageHandler);
 

@@ -6,6 +6,7 @@ test('stopping docker network..', (t) => {
   exec(`docker-compose -f ${__dirname}/docker-compose-testbed.yaml down`, (err, stdout, stderr) => {
     //console.log(stdout);
     //console.log(stderr);
+    //console.log(err);
     t.end(err) ;
   });
 });

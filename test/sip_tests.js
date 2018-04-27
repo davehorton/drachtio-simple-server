@@ -13,9 +13,8 @@ function connect(connectable) {
     });
   });
 }
-test('PUBLISH', (t) => {
+test.skip('PUBLISH', (t) => {
   const {srf, db} = require('..');
-
   t.timeoutAfter(60000);
 
   Promise.all([connect(srf), connect(db)])
@@ -172,6 +171,52 @@ test('PUBLISH', (t) => {
 
 
     .then(() => {
+      //srf.disconnect();
+      //db.disconnect();
+      t.end();
+      return;
+    })
+    .catch((err) => {
+      t.error(err);
+      console.log(`error: ${err}: ${err.stack}`);
+      srf.disconnect();
+      db.disconnect();
+      //console.log(output());
+      t.end();
+    });
+});
+
+test('SUBSCRIBE', (t) => {
+  const {srf, db} = require('..');
+
+  t.timeoutAfter(60000);
+
+  //Promise.resolve()
+  Promise.all([connect(srf), connect(db)])
+    .then(() => {
+      return sippUac('uac-subscribe-unknown-event.xml');
+    })
+    .then(() => {
+      t.pass('return 489 Bad Event to unknown event');
+      return sippUac('uac-subscribe-missing-event.xml');
+    })
+    .then(() => {
+      t.pass('return 400 Bad Request if Event header not provided');
+      return sippUac('uac-subscribe-expires-too-short.xml');
+    })
+    .then(() => {
+      t.pass ('return 423 Interval too short if Expires is < min');
+      return sippUac('uac-subscribe-notify-unsubscribe.xml');
+    })
+    .then(() => {
+      t.pass('successfully subscribe-notify-unsubscribe for presence events');
+      return db.getCountOfSubscriptions();
+    })
+    .then((count) => {
+      return t.ok(count === 0, 'No subscriptions after removal');
+    })
+
+    .then(() => {
       srf.disconnect();
       db.disconnect();
       t.end();
@@ -182,7 +227,7 @@ test('PUBLISH', (t) => {
       console.log(`error: ${err}: ${err.stack}`);
       srf.disconnect();
       db.disconnect();
-      //console.log(output());
+      console.log(output());
       t.end();
     });
 });
