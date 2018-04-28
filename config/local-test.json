@@ -26,6 +26,9 @@
           "presence": 3600
         }
       }
+    },
+    "message": {
+      "authenticate": true
     }
   }
   ,"test-users": [

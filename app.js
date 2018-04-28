@@ -42,19 +42,36 @@ else {
   srf.listen(config.get('drachtio'));
 }
 
-const optionsHandler = require('./lib/options.js')({logger, db});
-const subscribeHandler = require('./lib/subscribe.js')({logger, db});
-const publishHandler = require('./lib/publish.js')({logger, db});
-const messageHandler = require('./lib/message.js')({logger, db});
+let authenticator;
+if (process.env.NODE_ENV === 'test') {
+  authenticator = require('./lib/plugins/authenticate-test');
+}
+else {
+  authenticator = require('./lib/plugins/your-authenticator-here');
+}
 
-srf.options(optionsHandler);
+if (enabled.options) {
+  const optionsHandler = require('./lib/options.js')({logger, db});
+  srf.options(optionsHandler);
+}
+
 if (enabled.subscribe) {
+  const subscribeHandler = require('./lib/subscribe.js')({logger, db});
   if (config.has('methods.subscribe.authenticate') && config.get('methods.subscribe.authenticate') === true) {
-    srf.use('subscribe', require('./lib/db/authenticate'));
+    srf.use('subscribe', authenticator);
   }
   srf.subscribe(subscribeHandler);
 }
-if (enabled.publish) srf.publish(publishHandler);
-if (enabled.message) srf.message(messageHandler);
+if (enabled.publish) {
+  const publishHandler = require('./lib/publish.js')({logger, db});
+  srf.publish(publishHandler);
+}
+if (enabled.message) {
+  const messageHandler = require('./lib/message.js')({logger, db});
+  if (config.has('methods.message.authenticate') && config.get('methods.message.authenticate') === true) {
+    srf.use('message', authenticator);
+  }
+  srf.message(messageHandler);
+}
 
 module.exports = {srf, db};

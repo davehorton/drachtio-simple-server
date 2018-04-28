@@ -262,6 +262,35 @@ test('SUBSCRIBE', (t) => {
     })
 
     .then(() => {
+      //srf.disconnect();
+      //db.disconnect();
+      t.end();
+      return;
+    })
+    .catch((err) => {
+      t.error(err);
+      console.log(`error: ${err}: ${err.stack}`);
+      srf.disconnect();
+      db.disconnect();
+      console.log(output());
+      t.end();
+    });
+});
+
+test('MESSAGE', (t) => {
+  const {srf, db} = require('..');
+
+  t.timeoutAfter(20000);
+
+  Promise.resolve()
+    .then(() => {
+      return sippUac('uac-message-success.xml');
+    })
+    .then(() => {
+      return t.pass('forwards MESSAGE successfully');
+    })
+
+    .then(() => {
       srf.disconnect();
       db.disconnect();
       t.end();
