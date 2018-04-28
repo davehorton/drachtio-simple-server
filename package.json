@@ -30,7 +30,7 @@
     "config": "^1.30.0",
     "debug": "^3.1.0",
     "drachtio-mw-digest-auth": "^0.1.0",
-    "drachtio-srf": "^4.2.11",
+    "drachtio-srf": "^4.2.13",
     "lodash": "^4.17.5",
     "minimist": "^1.2.0",
     "pino": "^4.13.0",

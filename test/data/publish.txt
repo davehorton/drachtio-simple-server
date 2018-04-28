@@ -1,9 +1,9 @@
-PUBLISH sip:151484@sip.qa.phone.com SIP/2.0
+PUBLISH sip:sip:resource@example.com SIP/2.0
 Via: SIP/2.0/UDP 10.0.1.7:53980;branch=z9hG4bK-524287-1---f3dac96e977a105b;rport
 Max-Forwards: 70
 Contact: <sip:151484@10.0.1.7:53980>
-To: <sip:151484@sip.qa.phone.com>
-From: "501"<sip:151484@sip.qa.phone.com>;tag=cc983470
+To: <sip:sip:resource@example.com>
+From: <sip:sip:resource@example.com>;tag=cc983470
 Call-ID: 89373MmRhNzc0NDQyZmY5ZTQyYThkNWQzZDBiZmI1MTFkMjM
 CSeq: 1 PUBLISH
 Expires: 30
@@ -17,7 +17,7 @@ Content-Length: 386
 <presence xmlns="urn:ietf:params:xml:ns:pidf"
 xmlns:dm="urn:ietf:params:xml:ns:pidf:data-model"
 xmlns:rpid="urn:ietf:params:xml:ns:pidf:rpid"
- entity="sip:151484@sip.qa.phone.com">
+ entity="sip:sip:resource@example.com">
 <tuple id="dbac281a0de5d15043">
 <status>
 <basic>closed</basic>

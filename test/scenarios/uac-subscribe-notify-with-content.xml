@@ -31,7 +31,7 @@
       To: <sip:resource@drachtio.org>
       Call-ID: [call_id]
       CSeq: 1 SUBSCRIBE
-      Subject: uac-subscribe-notify-unsubscribe
+      Subject: uac-subscribe-notify-with-content
       Event: presence
       Accept: application/pidf+xml
       Contact: <sip:sipp@[local_ip]:[local_port]>
@@ -68,8 +68,10 @@
 
   <recv request="NOTIFY">
     <action>
-      <ereg regexp="active" search_in="hdr" header="Subscription-State:" check_it="true" assign_to="1"/>
-      <log message="Subscription-State [$1]"/>
+      <ereg regexp="application\\/pidf\\+xml" search_in="hdr" header="Content-Type:" check_it="true" assign_to="1"/>
+      <ereg regexp="active" search_in="hdr" header="Subscription-State:" check_it="true" assign_to="2"/>
+      <log message="Content-Type [$1]"/>
+      <log message="Subscription-State [$2]"/>
     </action>
   </recv>
 
@@ -96,6 +98,7 @@
       To: <sip:resource@drachtio.org>
       Call-ID: [call_id]
       CSeq: 3 SUBSCRIBE
+      Subject: uac-subscribe-notify-with-content
       Event: presence
       Accept: application/pidf+xml
       Contact: <sip:sipp@[local_ip]:[local_port]>

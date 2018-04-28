@@ -57,3 +57,5 @@ typings/
 # dotenv environment variables file
 .env
 
+# or else travis fails
+package-lock.json

@@ -5,10 +5,12 @@ const srf = new Srf();
 const Db = require('./lib/db/redis');
 const argv = require('minimist')(process.argv.slice(2));
 const noop = () => {};
-const logger = process.env.NODE_ENV === 'test' ?
-  {info: noop, error: noop} :
-  pino({serializers: {err: pino.stdSerializers.err}});
+const logger = pino({serializers: {err: pino.stdSerializers.err}});
 const db = new Db({logger});
+
+if (process.env.NODE_ENV === 'test') {
+  logger.info = noop;
+}
 
 process.on('unhandledRejection', (reason, p) => {
   console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);

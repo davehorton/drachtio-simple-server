@@ -25,13 +25,12 @@
   <send retrans="500">
     <![CDATA[
 
-      PUBLISH sip:151484@sip.qa.phone.com SIP/2.0
+      PUBLISH sip:resource@example.com SIP/2.0
       Via: SIP/2.0/UDP 10.0.1.7:53980;branch=z9hG4bK-524287-1---f3dac96e977a105b;rport
       Max-Forwards: 70
-      Contact: <sip:151484@10.0.1.7:53980>
-      To: <sip:151484@sip.qa.phone.com>
-      From: "501"<sip:151484@sip.qa.phone.com>;tag=cc983470
-      Call-ID: [call_id]
+      Contact: <resource@example.com>
+      To: <sip:resource@example.com>
+      From: <sip:resource@example.com>;tag=cc983470
       CSeq: 1 PUBLISH
       Expires: 30
       Allow: SUBSCRIBE, NOTIFY, INVITE, ACK, CANCEL, BYE, REFER, INFO, OPTIONS, MESSAGE

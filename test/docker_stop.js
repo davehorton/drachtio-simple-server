@@ -8,6 +8,7 @@ test('stopping docker network..', (t) => {
     //console.log(stderr);
     //console.log(err);
     t.end(err) ;
+    process.exit(0);
   });
 });
 

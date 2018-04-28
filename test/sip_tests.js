@@ -13,11 +13,30 @@ function connect(connectable) {
     });
   });
 }
-test.skip('PUBLISH', (t) => {
+
+test('initialize', (t) => {
   const {srf, db} = require('..');
-  t.timeoutAfter(60000);
+  t.timeoutAfter(10000);
 
   Promise.all([connect(srf), connect(db)])
+    .then(() => {
+      return db.flushdb();
+    })
+    .then((result) => {
+      t.ok(result === 'OK', 'cleared database');
+      return t.end();
+    })
+    .catch((err) => {
+      t.end(err);
+    });
+});
+
+test('PUBLISH', (t) => {
+  const {srf, db} = require('..');
+
+  t.timeoutAfter(60000);
+
+  Promise.resolve()
     .then(() => {
       return sippUac('uac-publish-unknown-event.xml');
     })
@@ -191,8 +210,7 @@ test('SUBSCRIBE', (t) => {
 
   t.timeoutAfter(60000);
 
-  //Promise.resolve()
-  Promise.all([connect(srf), connect(db)])
+  Promise.resolve()
     .then(() => {
       return sippUac('uac-subscribe-unknown-event.xml');
     })
@@ -214,6 +232,24 @@ test('SUBSCRIBE', (t) => {
     })
     .then((count) => {
       return t.ok(count === 0, 'No subscriptions after removal');
+    })
+    .then(() => {
+      return sippUac('uac-publish-presence-5s.xml');
+    })
+    .then(() => {
+      t.pass('successfully published event state for a resource');
+      return sippUac('uac-subscribe-notify-with-content.xml');
+    })
+    .then(() => {
+      t.pass('successfully subscribed and got initial event state...waiting 5s for expiry');
+      return sippUac('uac-publish-presence-5s.xml');
+    })
+    .then(() => {
+      return sippUac('uac-subscribe-expire.xml');
+    })
+    .then(() => {
+      t.pass('subscription removed after expiration');
+      return;
     })
 
     .then(() => {
