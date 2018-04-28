@@ -31,7 +31,7 @@ obj.sippUac = (file, vars) => {
     '-v', `${__dirname}/../scenarios:/tmp/scenarios`,
     'drachtio/sipp', 'sipp', '-sf', `/tmp/scenarios/${file}`,
     '-m', '1',
-    '-sleep', '50ms',
+    '-sleep', '5ms',
     '-nostdin',
     '-cid_str', `%u-%p@%s-${idx++}`
   ]

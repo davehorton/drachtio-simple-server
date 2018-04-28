@@ -212,6 +212,12 @@ test('SUBSCRIBE', (t) => {
 
   Promise.resolve()
     .then(() => {
+      return sippUac('uac-subscribe-non-existent-dialog.xml');
+    })
+    .then(() => {
+      return t.pass('returns 481 to new SUBSCRIBE with Expires: 0');
+    })
+    .then(() => {
       return sippUac('uac-subscribe-unknown-event.xml');
     })
     .then(() => {
@@ -249,7 +255,10 @@ test('SUBSCRIBE', (t) => {
     })
     .then(() => {
       t.pass('subscription removed after expiration');
-      return;
+      return sippUac('uac-subscribe-refresh.xml');
+    })
+    .then(() => {
+      return t.pass('successfully refreshed subscription');
     })
 
     .then(() => {
