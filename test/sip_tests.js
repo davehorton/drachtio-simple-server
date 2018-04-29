@@ -1,6 +1,6 @@
 const test = require('blue-tape');
 const { output, sippUac } = require('./scripts/sipp')('test_simple');
-//const debug = require('debug')('drachtio:simple-server');
+const debug = require('debug')('drachtio:simple-server');
 
 process.on('unhandledRejection', (reason, p) => {
   console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
@@ -20,10 +20,12 @@ test('initialize', (t) => {
 
   Promise.all([connect(srf), connect(db)])
     .then(() => {
+      t.pass('connected to drachtio');
+      t.pass('connected to redis');
       return db.flushdb();
     })
     .then((result) => {
-      t.ok(result === 'OK', 'cleared database');
+      t.ok(result === 'OK', 'cleared redis test database');
       return t.end();
     })
     .catch((err) => {
@@ -134,7 +136,7 @@ test('PUBLISH', (t) => {
     .then(() => {
       const {etag} = db.lastInsert;
       t.pass(`initial state published with ETag: ${etag}`);
-      return sippUac('uac-publish-refresh-success.xml', ['-set', 'etag', etag]);
+      return sippUac('uac-publish-refresh-success.xml', {vars: ['-set', 'etag', etag]});
     })
     .then(() => {
       const {etag} = db.lastRefresh;
@@ -163,7 +165,7 @@ test('PUBLISH', (t) => {
     .then((obj) => {
       const {etag} = db.lastRefresh;
       t.ok(obj !== null, 'after refresh event state has new expiry');
-      return sippUac('uac-publish-modify-success.xml', ['-set', 'etag', etag]);
+      return sippUac('uac-publish-modify-success.xml', {vars: ['-set', 'etag', etag]});
     })
     .then(() => {
       const {etag} = db.lastModify;
@@ -173,7 +175,7 @@ test('PUBLISH', (t) => {
     .then((count) => {
       const {etag} = db.lastModify;
       t.ok(count === 1, 'old ETag is removed when event state was modified');
-      return sippUac('uac-publish-remove-success.xml', ['-set', 'etag', etag]);
+      return sippUac('uac-publish-remove-success.xml', {vars: ['-set', 'etag', etag]});
     })
     .then(() => {
       t.pass('PUBLISH with Expires: 0 removes event state');
@@ -187,11 +189,7 @@ test('PUBLISH', (t) => {
       t.ok(count === 0, 'count of keys is now zero');
       return;
     })
-
-
     .then(() => {
-      //srf.disconnect();
-      //db.disconnect();
       t.end();
       return;
     })
@@ -200,7 +198,7 @@ test('PUBLISH', (t) => {
       console.log(`error: ${err}: ${err.stack}`);
       srf.disconnect();
       db.disconnect();
-      //console.log(output());
+      console.log(output());
       t.end();
     });
 });
@@ -258,12 +256,15 @@ test('SUBSCRIBE', (t) => {
       return sippUac('uac-subscribe-refresh.xml');
     })
     .then(() => {
-      return t.pass('successfully refreshed subscription');
+      t.pass('successfully refreshed subscription');
+      sippUac('uac-publish-presence-30s.xml', {sleep: '4s'});
+      debug('launched presence app with 4s sleep');
+      return sippUac('uac-subscribe-publish-notify.xml');
     })
-
     .then(() => {
-      //srf.disconnect();
-      //db.disconnect();
+      return t.pass('NOTIFY subscribers when new event state published');
+    })
+    .then(() => {
       t.end();
       return;
     })
@@ -303,5 +304,22 @@ test('MESSAGE', (t) => {
       db.disconnect();
       console.log(output());
       t.end();
+    });
+});
+
+
+test('uninitialize', (t) => {
+  const {srf, db} = require('..');
+
+  t.timeoutAfter(60000);
+
+  Promise.resolve()
+    .then(() => {
+      srf.disconnect();
+      db.disconnect();
+      return t.end();
+    })
+    .catch((err) => {
+      t.end(err);
     });
 });

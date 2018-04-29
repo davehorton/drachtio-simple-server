@@ -1,5 +1,5 @@
 const { spawn } = require('child_process');
-const debug = require('debug')('test:sipp');
+const debug = require('debug')('drachtio:simple-server');
 let network;
 const obj = {};
 let output = '';
@@ -24,18 +24,19 @@ obj.output = () => {
   return output;
 };
 
-obj.sippUac = (file, vars) => {
+obj.sippUac = (file, obj) => {
+  obj = obj || {};
   const cmd = 'docker';
   const args = [
     'run', '-ti', '--rm', '--net', `${network}`,
     '-v', `${__dirname}/../scenarios:/tmp/scenarios`,
     'drachtio/sipp', 'sipp', '-sf', `/tmp/scenarios/${file}`,
     '-m', '1',
-    '-sleep', '5ms',
+    '-sleep', obj.sleep || '5ms',
     '-nostdin',
     '-cid_str', `%u-%p@%s-${idx++}`
   ]
-    .concat(Array.isArray(vars) ? vars : [])
+    .concat(Array.isArray(obj.vars) ? obj.vars : [])
     .concat(['drachtio']);
 
   clearOutput();

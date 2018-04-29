@@ -31,6 +31,7 @@
       Contact: <resource@example.com>
       To: <sip:resource@example.com>
       From: <sip:resource@example.com>;tag=cc983470
+      Call-ID: [call_id]
       CSeq: 1 PUBLISH
       Expires: 30
       Allow: SUBSCRIBE, NOTIFY, INVITE, ACK, CANCEL, BYE, REFER, INFO, OPTIONS, MESSAGE
