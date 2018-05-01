@@ -25,12 +25,11 @@
   <send retrans="500">
     <![CDATA[
 
-      PUBLISH sip:resource@example.com SIP/2.0
+      PUBLISH sip:resource@drachtio.org SIP/2.0
       Via: SIP/2.0/UDP 10.0.1.7:53980;branch=z9hG4bK-524287-1---f3dac96e977a105b;rport
       Max-Forwards: 70
-      Contact: <resource@example.com>
-      To: <sip:resource@example.com>
-      From: <sip:resource@example.com>;tag=cc983470
+      To: <sip:resource@drachtio.org>
+      From: <sip:resource@drachtio.org>;tag=cc983470
       Call-ID: [call_id]
       CSeq: 1 PUBLISH
       Allow: SUBSCRIBE, NOTIFY, INVITE, ACK, CANCEL, BYE, REFER, INFO, OPTIONS, MESSAGE
@@ -43,7 +42,7 @@
       <presence xmlns="urn:ietf:params:xml:ns:pidf"
       xmlns:dm="urn:ietf:params:xml:ns:pidf:data-model"
       xmlns:rpid="urn:ietf:params:xml:ns:pidf:rpid"
-       entity="sip:sip:resource@example.com">
+       entity="sip:sip:resource@drachtio.org">
       <tuple id="dbac281a0de5d15043">
       <status>
       <basic>closed</basic>

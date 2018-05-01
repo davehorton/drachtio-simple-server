@@ -1,9 +1,9 @@
-SUBSCRIBE sip:sip:resource@example.com SIP/2.0
+SUBSCRIBE sip:sip:resource@drachtio.org SIP/2.0
 Via: SIP/2.0/UDP 10.0.1.7:53980;branch=z9hG4bK-524287-1---9d811f6c79bbb965;rport
 Max-Forwards: 70
 Contact: <sip:151484@10.0.1.7:53980>
-To: <sip:sip:resource@example.com>
-From: "501"<sip:sip:resource@example.com>;tag=6b1d4109
+To: <sip:sip:resource@drachtio.org>
+From: "501"<sip:sip:resource@drachtio.org>;tag=6b1d4109
 Call-ID: 89373NzY2MjEwYmQ5ZjQ3YjU2YmU4ZjVmNmVhYTMzNDVjNDQ
 CSeq: 1 SUBSCRIBE
 Expires: 300

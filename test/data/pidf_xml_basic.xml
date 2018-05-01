@@ -2,7 +2,7 @@
 <presence xmlns="urn:ietf:params:xml:ns:pidf"
 xmlns:dm="urn:ietf:params:xml:ns:pidf:data-model"
 xmlns:rpid="urn:ietf:params:xml:ns:pidf:rpid"
- entity="sip:resource@example.com">
+ entity="sip:resource@drachtio.org">
 <tuple id="dbac281a0de5d15043">
 <status>
 <basic>closed</basic>

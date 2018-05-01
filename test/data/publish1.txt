@@ -1,11 +1,10 @@
-PUBLISH sip:135684@sip.phone.com:5060 SIP/2.0
+PUBLISH sip:135684@drachtio.org SIP/2.0
 Via: SIP/2.0/UDP 10.128.77.170:5060;branch=z9hG4bK1sansay2189304364rdb47714
 Record-Route: <sip:sansay2189304364rdb47714@10.128.77.170:5060;lr;transport=udp>
-To: <sip:135684@10.128.77.12>
-From: "Phone.com" <sip:135684@10.128.77.12>;tag=sansay2189304364rdb47714
+To: <sip:135684@drachtio.org>
+From: <sip:135684@drachtio.org>;tag=sansay2189304364rdb47714
 Call-ID: 151635_rel67ZGQyNjQxOTRmYzhhYjQyYTMyMjc2MDI2NDA2YTgwMWU
 CSeq: 1 PUBLISH
-Contact: <sip:135684@10.128.77.170:5060>
 Expires: 900
 Allow: INVITE, ACK, CANCEL, BYE, REFER, INFO, NOTIFY, OPTIONS, UPDATE, PRACK, SUBSCRIBE, MESSAGE
 User-Agent: Bria Mobile Beta Android 5.2.1 build 103434
@@ -18,7 +17,7 @@ Content-Length: 405
 <presence xmlns="urn:ietf:params:xml:ns:pidf"
 xmlns:dm="urn:ietf:params:xml:ns:pidf:data-model"
 xmlns:rpid="urn:ietf:params:xml:ns:pidf:rpid"
- entity="sip:135684@sip.phone.com:6060">
+ entity="sip:135684@drachtio.org">
 <tuple id="41c8868ed39d34e026">
 <status>
 <basic>open</basic>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
    <presence xmlns="urn:ietf:params:xml:ns:pidf"
         xmlns:im="urn:ietf:params:xml:ns:pidf:im"
-        xmlns:myex="http://id.example.com/presence/"
-        entity="pres:someone@example.com">
+        xmlns:myex="http://id.drachtio.org/presence/"
+        entity="pres:someone@drachtio.org">
      <tuple id="bs35r9">
        <status>
          <basic>open</basic>
@@ -18,7 +18,7 @@
        <status>
          <basic>open</basic>
        </status>
-       <contact priority="1.0">mailto:someone@example.com</contact>
+       <contact priority="1.0">mailto:someone@drachtio.org</contact>
      </tuple>
      <note>I'll be in Tokyo next week</note>
    </presence>
