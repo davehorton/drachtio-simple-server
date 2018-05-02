@@ -17,7 +17,8 @@
     "sip",
     "drachtio",
     "SIMPLE",
-    "presence"
+    "presence",
+    "IM"
   ],
   "author": "Dave Horton",
   "license": "MIT",
