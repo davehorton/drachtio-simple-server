@@ -23,7 +23,7 @@ A redis server is used to store event state and subscriptions.  The server may b
 
 ## Running the app
 
-If the app is started wit no command line arguments, it will handle all of the supported request types identified above.
+If the app is started with no command line arguments, it will handle all of the supported request types identified above.
 
 Alternatively, the specific requests to handle can be specified on the command line.  This allows you to run multiple applications for instance, one handling only MESSAGE requests while another handles presence:
 
@@ -43,11 +43,11 @@ Either inbound or outbound connections are supported.  See the section below for
 This is an object containing `address` and `port` properties.
 * `supported-events`: An array of event types to supports.  These should be the event name 
 as received in the SIP Event header of SUBSCRIBE and PUBLISH requests.  Note that 
-while the main purpose is to support the presence event package, any other event package 
+while the main purpose is to support the 'presence' event package, any other event package 
 can be supported by adding it to this array.
 * `domain`: an optional parameter that, if provided, will be used as the SIP realm or domain 
 when a SIP PUBLISH or SUBSCRIBE request is received with a dot-decimal address in the Request-URI 
-instead of the domain (some Session Border Controllers, as an example, may replace the 
+instead of a domain name (some SBCs, for example, may replace the 
 SIP domain with the ip address of an application server when performing load balancing).
 * `methods`: options for handling PUBLISH/SUBSCRIBE/MESSAGE requests
 * `methods.publish.authenticate`: if true, authenticate incoming PUBLISH requests (using digest authentication)
