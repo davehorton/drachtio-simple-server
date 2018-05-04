@@ -290,6 +290,12 @@ test('MESSAGE', (t) => {
     .then(() => {
       return t.pass('forwards MESSAGE successfully');
     })
+    .then(() => {
+      return sippUac('uac-message-emoji-success.xml');
+    })
+    .then(() => {
+      return t.pass('forwards MESSAGE with emojis');
+    })
 
     .then(() => {
       srf.disconnect();
